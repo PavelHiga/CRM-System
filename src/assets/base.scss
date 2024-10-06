@@ -1,0 +1,33 @@
+:root {
+  --blue-button: #5393ff;
+  --red-button: #fe675c;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+input {
+  border: none;
+  background-color: inherit;
+  font-size: inherit;
+  outline: none;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+  color: white;
+  border-radius: 7px;
+}
+
+body {
+  min-height: 100vh;
+  color: #9a9c9d;
+  background: #f1f4f9;
+  line-height: 1.5;
+  font-family: Inter, sans-serif;
+  font-size: 18px;
+}
