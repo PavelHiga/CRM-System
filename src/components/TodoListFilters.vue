@@ -1,34 +1,34 @@
 <template>
   <div class="filters_wrapper">
-    <template v-for="(el, index) in filterArr" :key="index">
-      <p
-        @click="filterClick(el.status, index)"
-        :class="store.activeFilterIndex == index ? 'filter-active' : 'filter'"
-      >
-        {{ el.title }} ({{ el.count }})
-      </p>
-    </template>
+    <p
+      v-for="(el, index) in filterArr"
+      :key="index"
+      @click="changeFilterHandler(el.status, index)"
+      :class="activeFilterIndex == index ? 'filterActive' : 'filter'"
+    >
+      {{ el.title }} ({{ el.count }})
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getAllTodos } from '@/api';
-import { store } from '@/store/store';
 import type { TodoInfo } from '@/types/types';
 import { ref, watchEffect } from 'vue';
 
 const props = defineProps<{
   data: TodoInfo | undefined;
+  activeFilterIndex: number;
 }>();
 
-const filterClick = (status: string, index: number) => {
-  getAllTodos(status);
-  store.activeFilterIndex = index;
+const emit = defineEmits(['filterChanged']);
+
+const changeFilterHandler = (status: 'all' | 'inWork' | 'completed', index: number) => {
+  emit('filterChanged', index, status);
 };
 
-// ?
-
-const filterArr = ref<{ title: string; status: string; count: number | undefined }[]>([]);
+const filterArr = ref<{ title: string; status: 'all' | 'inWork' | 'completed'; count: number | undefined }[]>(
+  []
+);
 
 watchEffect(() => {
   if (props.data) {
@@ -51,13 +51,13 @@ watchEffect(() => {
   .filter {
     cursor: pointer;
     font-weight: 500;
+  }
 
-    &-active {
-      color: rgb(8, 174, 251);
-      font-weight: 600;
-      text-decoration: underline;
-      cursor: pointer;
-    }
+  .filterActive {
+    color: rgb(8, 174, 251);
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
   }
 }
 </style>

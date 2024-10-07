@@ -1,8 +1,8 @@
 <template>
-  <div class="todolist_wrapper">
-    <template v-for="data in data" :key="data.id">
-      <TodoListItem :data="data" />
-    </template>
+  <div class="todo_wrapper">
+    <div v-for="data in data" :key="data.id">
+      <TodoListItem @todo-changed="handleEvent" :data="data" />
+    </div>
   </div>
 </template>
 
@@ -13,10 +13,16 @@ import TodoListItem from './TodoListItem.vue';
 const props = defineProps<{
   data: Todo[] | undefined;
 }>();
+
+const emit = defineEmits(['todoChanged']);
+
+const handleEvent = () => {
+  emit('todoChanged');
+};
 </script>
 
 <style scoped>
-.todolist_wrapper {
+.todo_wrapper {
   display: flex;
   flex-direction: column;
   gap: 15px;

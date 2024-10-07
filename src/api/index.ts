@@ -1,7 +1,8 @@
-import { store } from '@/store/store';
 import type { MetaResponse, Todo, TodoInfo, TodoRequest } from '@/types/types';
 
-export const getAllTodos = async (status: string) => {
+export const getAllTodos = async (
+  status: 'all' | 'inWork' | 'completed'
+): Promise<MetaResponse<Todo, TodoInfo>> => {
   const response = await fetch(`https://easydev.club/api/v1/todos?filter=${status}`, {
     method: 'Get',
   });
@@ -12,7 +13,7 @@ export const getAllTodos = async (status: string) => {
 
   const metaResponse: MetaResponse<Todo, TodoInfo> = await response.json();
 
-  store.data = metaResponse;
+  return metaResponse;
 };
 
 export const createTodo = async (todo: TodoRequest): Promise<Todo> => {
@@ -22,14 +23,10 @@ export const createTodo = async (todo: TodoRequest): Promise<Todo> => {
   });
 
   if (!response.ok) {
-    alert('Ошибка');
     throw new Error(response.statusText);
   }
 
   const result = await response.json();
-
-  store.activeFilterIndex = 0;
-  getAllTodos('all');
 
   return result;
 };
@@ -40,13 +37,7 @@ export const deleteTodo = async (id: number) => {
   });
 
   if (!response.ok) {
-    alert('Ошибка');
     throw new Error(response.statusText);
-  }
-
-  if (response.status === 200) {
-    store.activeFilterIndex = 0;
-    getAllTodos('all');
   }
 };
 
@@ -59,14 +50,10 @@ export const changeTodoStatus = async (todo: Todo): Promise<Todo> => {
   });
 
   if (!response.ok) {
-    alert('Ошибка');
     throw new Error(response.statusText);
   }
 
   const result = await response.json();
-
-  store.activeFilterIndex = 0;
-  getAllTodos('all');
 
   return result;
 };
@@ -80,14 +67,10 @@ export const editTodo = async (todo: Todo): Promise<Todo> => {
   });
 
   if (!response.ok) {
-    alert('Ошибка');
     throw new Error(response.statusText);
   }
 
   const result = await response.json();
-
-  store.activeFilterIndex = 0;
-  getAllTodos('all');
 
   return result;
 };
