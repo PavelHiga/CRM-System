@@ -4,7 +4,8 @@
       <input v-model="editedTodo" class="task_input" type="text" />
     </template>
     <template v-else>
-      <div @click="changeStatusHandler(data)" class="task_info">
+      <div class="task_info">
+        <input @click="changeStatusHandler(data)" class="hidden_checkbox" type="checkbox" />
         <div class="checkbox" :class="{ checkboxDone: data.isDone }">
           <IconDone size="20px" />
         </div>
@@ -124,6 +125,14 @@ const saveTodoHandler = async () => {
     cursor: pointer;
 
     word-break: keep-all;
+
+    .hidden_checkbox {
+      width: 355px;
+      position: absolute;
+      height: 30px;
+      cursor: pointer;
+      opacity: 0;
+    }
 
     .checkbox {
       @extend %info_checkbox;

@@ -1,12 +1,12 @@
 <template>
   <div class="wrapper">
-    <AddTodoForm @todoCreated="handleEvent" />
+    <AddTodoForm @todoCreated="UpdateTasks" />
     <TodoListFilters
-      @filterChanged="(index, status) => handleEvent(index, status)"
+      @filterChanged="(status) => UpdateTasks(status)"
       :data="store.data?.info"
       :activeFilterIndex="store.activeFilterIndex"
     />
-    <TodoList @todoChanged="handleEvent" :data="store.data ? store.data?.data : []" />
+    <TodoList @todoChanged="UpdateTasks" :data="store.data ? store.data?.data : []" />
   </div>
 </template>
 
@@ -23,14 +23,14 @@ onMounted(async () => {
   store.data = await getAllTodos('all');
 });
 
-const handleEvent = async (index: number = 0, status: 'all' | 'inWork' | 'completed' = 'all') => {
+const UpdateTasks = async (status: 'all' | 'inWork' | 'completed' = 'all') => {
   store.data = await getAllTodos(status);
-  store.activeFilterIndex = index;
+  store.activeFilterIndex = status;
 };
 
 const store: IData = reactive({
   data: null,
-  activeFilterIndex: 0,
+  activeFilterIndex: 'all',
 });
 </script>
 

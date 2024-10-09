@@ -3,8 +3,8 @@
     <p
       v-for="(el, index) in filterArr"
       :key="index"
-      @click="changeFilterHandler(el.status, index)"
-      :class="activeFilterIndex == index ? 'filterActive' : 'filter'"
+      @click="changeFilterHandler(el.status)"
+      :class="activeFilterIndex == el.status ? 'filterActive' : 'filter'"
     >
       {{ el.title }} ({{ el.count }})
     </p>
@@ -17,13 +17,13 @@ import { ref, watchEffect } from 'vue';
 
 const props = defineProps<{
   data: TodoInfo | undefined;
-  activeFilterIndex: number;
+  activeFilterIndex: 'all' | 'inWork' | 'completed';
 }>();
 
 const emit = defineEmits(['filterChanged']);
 
-const changeFilterHandler = (status: 'all' | 'inWork' | 'completed', index: number) => {
-  emit('filterChanged', index, status);
+const changeFilterHandler = (status: 'all' | 'inWork' | 'completed') => {
+  emit('filterChanged', status);
 };
 
 const filterArr = ref<{ title: string; status: 'all' | 'inWork' | 'completed'; count: number | undefined }[]>(

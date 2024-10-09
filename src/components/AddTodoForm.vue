@@ -22,11 +22,10 @@ const createTodoHandler = async () => {
     });
 
     emit('todoCreated');
+    todoTitle.value = '';
   } else {
     alert('Количество символов должно быть в пределах от 2 до 64.');
   }
-
-  todoTitle.value = '';
 };
 </script>
 

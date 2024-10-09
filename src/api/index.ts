@@ -1,9 +1,11 @@
 import type { MetaResponse, Todo, TodoInfo, TodoRequest } from '@/types/types';
 
+const API = 'https://easydev.club/api/v1';
+
 export const getAllTodos = async (
   status: 'all' | 'inWork' | 'completed'
 ): Promise<MetaResponse<Todo, TodoInfo>> => {
-  const response = await fetch(`https://easydev.club/api/v1/todos?filter=${status}`, {
+  const response = await fetch(`${API}/todos?filter=${status}`, {
     method: 'Get',
   });
 
@@ -17,7 +19,7 @@ export const getAllTodos = async (
 };
 
 export const createTodo = async (todo: TodoRequest): Promise<Todo> => {
-  const response = await fetch('https://easydev.club/api/v1/todos', {
+  const response = await fetch(`${API}/todos`, {
     method: 'Post',
     body: JSON.stringify(todo),
   });
@@ -32,7 +34,7 @@ export const createTodo = async (todo: TodoRequest): Promise<Todo> => {
 };
 
 export const deleteTodo = async (id: number) => {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
+  const response = await fetch(`${API}/todos/${id}`, {
     method: 'Delete',
   });
 
@@ -42,7 +44,7 @@ export const deleteTodo = async (id: number) => {
 };
 
 export const changeTodoStatus = async (todo: Todo): Promise<Todo> => {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${todo.id}`, {
+  const response = await fetch(`${API}/todos/${todo.id}`, {
     method: 'Put',
     body: JSON.stringify({
       isDone: !todo.isDone,
@@ -59,7 +61,7 @@ export const changeTodoStatus = async (todo: Todo): Promise<Todo> => {
 };
 
 export const editTodo = async (todo: Todo): Promise<Todo> => {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${todo.id}`, {
+  const response = await fetch(`${API}/todos/${todo.id}`, {
     method: 'Put',
     body: JSON.stringify({
       title: todo.title,
