@@ -1,78 +1,61 @@
 import type { MetaResponse, Todo, TodoInfo, TodoRequest } from '@/types/types';
+import { axiosInstance } from '@/utils/axiosInstance';
 
 const API = 'https://easydev.club/api/v1';
 
 export const getAllTodos = async (
   status: 'all' | 'inWork' | 'completed'
 ): Promise<MetaResponse<Todo, TodoInfo>> => {
-  const response = await fetch(`${API}/todos?filter=${status}`, {
-    method: 'Get',
-  });
-
-  if (!response.ok) {
-    throw new Error(response.statusText);
+  try {
+    const response = await axiosInstance.get<MetaResponse<Todo, TodoInfo>>(`${API}/todos?filter=${status}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Не удалось получить все задачи');
   }
-
-  const metaResponse: MetaResponse<Todo, TodoInfo> = await response.json();
-
-  return metaResponse;
 };
 
 export const createTodo = async (todo: TodoRequest): Promise<Todo> => {
-  const response = await fetch(`${API}/todos`, {
-    method: 'Post',
-    body: JSON.stringify(todo),
-  });
-
-  if (!response.ok) {
-    throw new Error(response.statusText);
+  try {
+    const response = await axiosInstance.post<Todo>(`${API}/todos`, todo);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Не удалось создать задачу');
   }
-
-  const result = await response.json();
-
-  return result;
 };
 
 export const deleteTodo = async (id: number) => {
-  const response = await fetch(`${API}/todos/${id}`, {
-    method: 'Delete',
-  });
-
-  if (!response.ok) {
-    throw new Error(response.statusText);
+  try {
+    const response = await axiosInstance.delete(`${API}/todos/${id}`);
+  } catch (error) {
+    console.log(error);
+    throw new Error('Не удалось создать задачу');
   }
 };
 
 export const changeTodoStatus = async (todo: Todo): Promise<Todo> => {
-  const response = await fetch(`${API}/todos/${todo.id}`, {
-    method: 'Put',
-    body: JSON.stringify({
+  try {
+    const response = await axiosInstance.put<Todo>(`${API}/todos/${todo.id}`, {
       isDone: !todo.isDone,
-    }),
-  });
+    });
 
-  if (!response.ok) {
-    throw new Error(response.statusText);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Не удалось сменить статус задачи');
   }
-
-  const result = await response.json();
-
-  return result;
 };
 
 export const editTodo = async (todo: Todo): Promise<Todo> => {
-  const response = await fetch(`${API}/todos/${todo.id}`, {
-    method: 'Put',
-    body: JSON.stringify({
+  try {
+    const response = await axiosInstance.put<Todo>(`${API}/todos/${todo.id}`, {
       title: todo.title,
-    }),
-  });
+    });
 
-  if (!response.ok) {
-    throw new Error(response.statusText);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Не удалось редактировать задачу');
   }
-
-  const result = await response.json();
-
-  return result;
 };

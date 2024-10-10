@@ -33,7 +33,6 @@ const createTodoHandler = async () => {
 .wrapper {
   display: flex;
   gap: 25px;
-
   .input {
     width: 100%;
     padding: 10px 7px;

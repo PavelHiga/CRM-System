@@ -1,5 +1,5 @@
 <template>
-  <RouterView />
+  <div>Auth</div>
 </template>
 
 <script setup lang="ts"></script>
