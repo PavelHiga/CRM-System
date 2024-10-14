@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="container">
     <AddTodoForm @todoCreated="UpdateTasks" />
     <TodoListFilters
       @filterChanged="(status) => UpdateTasks(status)"
@@ -15,7 +15,7 @@ import { getAllTodos } from '@/api';
 import AddTodoForm from '@/components/AddTodoForm.vue';
 import TodoList from '@/components/TodoList.vue';
 import TodoListFilters from '@/components/TodoListFilters.vue';
-import type { IData } from '@/types/types';
+import type { IData } from '@/types/todoTypes';
 import { onMounted, reactive } from 'vue';
 
 onMounted(async () => {
@@ -34,7 +34,7 @@ const store: IData = reactive({
 </script>
 
 <style scoped lang="scss">
-.wrapper {
+.container {
   margin-top: 50px;
 }
 </style>
