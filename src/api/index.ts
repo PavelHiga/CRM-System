@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type { AuthData, Profile, Token, UserRegistration } from '@/types/authTypes';
+import type { AuthData, Profile, ProfileRequest, Token, UserRegistration } from '@/types/authTypes';
 import type { MetaResponse, Todo, TodoInfo, TodoRequest } from '@/types/todoTypes';
 import { axiosInstance } from '@/utils/axiosInstance';
 import { allResposeStatus } from '@/utils/responseStatus';
@@ -100,5 +100,27 @@ export const refreshAccessToken = async (): Promise<Token> => {
     console.log(error);
     const status = error?.request?.status;
     throw new Error(allResposeStatus[status]);
+  }
+};
+
+export const getUserProfile = async (): Promise<Profile> => {
+  try {
+    const response = await axiosInstance.get<Profile>(`/user/profile`);
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+    const status = error?.request?.status;
+    throw new Error(allResposeStatus[status]);
+  }
+};
+
+export const updateUserProfile = async (profileData: ProfileRequest): Promise<Profile> => {
+  try {
+    const response = await axiosInstance.put<Profile>(`/user/profile`, profileData);
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+    const status = error?.request?.status;
+    throw new Error(status === 400 ? 'Логин/электронная почта уже используются' : allResposeStatus[status]);
   }
 };

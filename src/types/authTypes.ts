@@ -25,10 +25,14 @@ export interface Profile {
   phoneNumber: string;
 }
 
+export interface UserData {
+  user: Profile | null;
+}
+
 export interface ProfileRequest {
-  username: string;
-  email: string;
-  phoneNumber: string;
+  username?: string;
+  email?: string;
+  phoneNumber?: string;
 }
 
 export interface PasswordRequest {

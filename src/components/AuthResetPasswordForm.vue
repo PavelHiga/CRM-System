@@ -5,9 +5,9 @@
       <div class="text-subtitle-1 text-medium-emphasis">Почта</div>
       <v-text-field placeholder="ivan@mail.ru" variant="outlined"></v-text-field>
 
-      <v-btn class="mt-2 bg-pink-darken-4 px-0 py-2 font-weight-bold" disabled type="submit" block
-        >Восстановить</v-btn
-      >
+      <v-btn class="mt-2 bg-pink-darken-4 px-0 py-2 font-weight-bold" disabled type="submit" block>
+        Восстановить
+      </v-btn>
     </v-form>
     <router-link
       to="/auth/signin"

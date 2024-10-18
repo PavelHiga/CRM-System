@@ -50,7 +50,7 @@ export const emailRules = [
 
 export const phoneNumberRules = [
   (value: string) => {
-    const phoneRegex = /^(?:\+7|8)?\s?\(?(\d{3})\)?\s?(\d{3})[-\s]?(\d{2})[-\s]?(\d{2})$/;
+    const phoneRegex = /^(?:7|8)?\s?\(?(\d{3})\)?\s?(\d{3})[-\s]?(\d{2})[-\s]?(\d{2})$/;
 
     if (value) {
       return phoneRegex.test(value) ? true : 'Неправильный номер телефона';

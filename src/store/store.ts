@@ -1,13 +1,16 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { reactive, ref, watchEffect } from 'vue';
 
-import { refreshAccessToken, signInAccount, signUpAccount } from '@/api';
+import { getUserProfile, refreshAccessToken, signInAccount, signUpAccount, updateUserProfile } from '@/api';
 import router from '@/router/router';
-import type { AuthData, UserRegistration } from '@/types/authTypes';
+import type { AuthData, ProfileRequest, UserData, UserRegistration } from '@/types/authTypes';
 
 export const useAuthStore = defineStore('auth', () => {
   const isAuth = ref(false);
   const isAccountCreated = ref(false);
+  const userData: UserData = reactive({
+    user: null,
+  });
 
   async function createAccount(registrationData: UserRegistration) {
     try {
@@ -55,11 +58,27 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  function logoutAccount() {
+    localStorage.removeItem('userTokens');
+    router.push('/auth/signin');
+  }
+
+  async function getUser() {
+    try {
+      userData.user = await getUserProfile();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return {
     isAuth,
     isAccountCreated,
+    userData,
     loginAccount,
     createAccount,
     checkAuth,
+    getUser,
+    logoutAccount,
   };
 });
