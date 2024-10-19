@@ -4,7 +4,7 @@
       v-for="(el, index) in filterArr"
       :key="index"
       @click="changeFilterHandler(el.status)"
-      :class="activeFilterIndex == el.status ? 'filterActive' : 'filter'"
+      :class="activeFilter == el.status ? 'filterActive' : 'filter'"
     >
       {{ el.title }} ({{ el.count }})
     </p>
@@ -17,7 +17,7 @@ import { ref, watchEffect } from 'vue';
 
 const props = defineProps<{
   data: TodoInfo | undefined;
-  activeFilterIndex: 'all' | 'inWork' | 'completed';
+  activeFilter: 'all' | 'inWork' | 'completed';
 }>();
 
 const emit = defineEmits(['filterChanged']);

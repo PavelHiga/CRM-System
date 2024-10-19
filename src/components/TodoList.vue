@@ -1,6 +1,6 @@
 <template>
   <div class="todo_wrapper">
-    <TodoListItem v-for="data in data" :key="data.id" @todo-changed="UpdateTasks" :data="data" />
+    <TodoListItem v-for="data in data" :key="data.id" @todoChanged="todoChangeHandler" :data="data" />
   </div>
 </template>
 
@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['todoChanged']);
 
-const UpdateTasks = () => {
+const todoChangeHandler = () => {
   emit('todoChanged');
 };
 </script>

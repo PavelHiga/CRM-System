@@ -1,12 +1,12 @@
 <template>
   <div class="wrapper">
-    <AddTodoForm @todoCreated="UpdateTasks" />
+    <AddTodoForm @todoCreated="updateTasks" />
     <TodoListFilters
-      @filterChanged="(status) => UpdateTasks(status)"
+      @filterChanged="updateTasks"
       :data="store.data?.info"
-      :activeFilterIndex="store.activeFilterIndex"
+      :activeFilter="store.activeFilter"
     />
-    <TodoList @todoChanged="UpdateTasks" :data="store.data ? store.data?.data : []" />
+    <TodoList @todoChanged="updateTasks" :data="store.data ? store.data?.data : []" />
   </div>
 </template>
 
@@ -17,20 +17,20 @@ import { getAllTodos } from './api';
 import AddTodoForm from './components/AddTodoForm.vue';
 import TodoList from './components/TodoList.vue';
 import TodoListFilters from './components/TodoListFilters.vue';
-import type { IData } from './types/types';
+import type { activeFilter, IData } from './types/types';
 
 onMounted(async () => {
   store.data = await getAllTodos('all');
 });
 
-const UpdateTasks = async (status: 'all' | 'inWork' | 'completed' = 'all') => {
+const updateTasks = async (status: activeFilter = 'all') => {
   store.data = await getAllTodos(status);
-  store.activeFilterIndex = status;
+  store.activeFilter = status;
 };
 
 const store: IData = reactive({
   data: null,
-  activeFilterIndex: 'all',
+  activeFilter: 'all',
 });
 </script>
 
