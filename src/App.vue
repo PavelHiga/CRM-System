@@ -1,22 +1,36 @@
 <template>
   <div class="wrapper">
-    <TodoHeading />
-    <TodoListFilters :data="store.data?.info" />
-    <TodoList :data="store.data?.data" />
+    <AddTodoForm @todoCreated="updateTasks" />
+    <TodoListFilters
+      @filterChanged="updateTasks"
+      :data="store.data?.info"
+      :activeFilter="store.activeFilter"
+    />
+    <TodoList @todoChanged="updateTasks" :data="store.data ? store.data?.data : []" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
 import { getAllTodos } from './api';
 
-import TodoHeading from './components/TodoHeading.vue';
+import AddTodoForm from './components/AddTodoForm.vue';
 import TodoList from './components/TodoList.vue';
 import TodoListFilters from './components/TodoListFilters.vue';
-import { store } from './store/store';
+import type { activeFilterStatus, IData } from './types/types';
 
-onMounted(() => {
-  getAllTodos('all');
+onMounted(async () => {
+  store.data = await getAllTodos('all');
+});
+
+const updateTasks = async (status: activeFilterStatus = 'all') => {
+  store.data = await getAllTodos(status);
+  store.activeFilter = status;
+};
+
+const store: IData = reactive({
+  data: null,
+  activeFilter: 'all',
 });
 </script>
 
