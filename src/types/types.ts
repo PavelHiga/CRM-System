@@ -24,9 +24,9 @@ export interface MetaResponse<T, N> {
   };
 }
 
-export type activeFilter = 'all' | 'inWork' | 'completed';
+export type activeFilterStatus = 'all' | 'inWork' | 'completed';
 
 export interface IData {
   data: MetaResponse<Todo, TodoInfo> | null;
-  activeFilter: activeFilter;
+  activeFilter: activeFilterStatus;
 }

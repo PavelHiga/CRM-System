@@ -17,13 +17,13 @@ import { getAllTodos } from './api';
 import AddTodoForm from './components/AddTodoForm.vue';
 import TodoList from './components/TodoList.vue';
 import TodoListFilters from './components/TodoListFilters.vue';
-import type { activeFilter, IData } from './types/types';
+import type { activeFilterStatus, IData } from './types/types';
 
 onMounted(async () => {
   store.data = await getAllTodos('all');
 });
 
-const updateTasks = async (status: activeFilter = 'all') => {
+const updateTasks = async (status: activeFilterStatus = 'all') => {
   store.data = await getAllTodos(status);
   store.activeFilter = status;
 };
