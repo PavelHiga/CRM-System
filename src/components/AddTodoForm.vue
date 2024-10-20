@@ -1,34 +1,36 @@
 <template>
-  <div class="heading_wrapper">
-    <input v-model="inputValue" class="input" type="text" placeholder="Task To Be Done..." />
-    <TheButton @click="createTodoClick" :variant="ButtonVariant.Create" />
+  <div class="wrapper">
+    <input v-model="todoTitle" class="input" type="text" placeholder="Task To Be Done..." />
+    <TheButton @click="createTodoHandler" variant="accent"> Add </TheButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ButtonVariant } from '@/types/buttonVariant';
 import TheButton from './TheButton.vue';
 import { ref } from 'vue';
 import { createTodo } from '@/api';
 
-const inputValue = ref('');
+const todoTitle = ref('');
 
-const createTodoClick = async () => {
-  if (inputValue.value.length >= 2 && inputValue.value.length <= 64) {
-    createTodo({
-      title: inputValue.value,
+const emit = defineEmits(['todoCreated']);
+
+const createTodoHandler = async () => {
+  if (todoTitle.value.length >= 2 && todoTitle.value.length <= 64) {
+    await createTodo({
+      title: todoTitle.value,
       isDone: false,
     });
+
+    emit('todoCreated');
+    todoTitle.value = '';
   } else {
     alert('Количество символов должно быть в пределах от 2 до 64.');
   }
-
-  inputValue.value = '';
 };
 </script>
 
 <style scoped lang="scss">
-.heading_wrapper {
+.wrapper {
   display: flex;
   gap: 25px;
 
