@@ -26,5 +26,5 @@ export interface MetaResponse<T, N> {
 
 export interface IData {
   data: MetaResponse<Todo, TodoInfo> | null;
-  activeFilterIndex: number;
+  activeFilterIndex: 'all' | 'inWork' | 'completed';
 }
