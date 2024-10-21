@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { routeNames } from '@/router/router';
+</script>
+
 <template>
   <v-sheet width="420" class="container d-flex flex-column justify-center">
     <h1 class="text-h4 text-center">Восстановление</h1>
@@ -10,14 +14,10 @@
       </v-btn>
     </v-form>
     <router-link
-      to="/auth/signin"
+      :to="{ name: routeNames.signin }"
       class="mt-5 cursor-pointer text-center text-pink-darken-4 text-decoration-none"
     >
       Отменить восстановление
     </router-link>
   </v-sheet>
 </template>
-
-<script setup lang="ts"></script>
-
-<style scoped></style>

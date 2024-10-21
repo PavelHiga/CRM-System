@@ -1,36 +1,64 @@
+import { accessToken } from '@/api/auth';
 import { createRouter, createWebHistory } from 'vue-router';
 
-import AuthLoginForm from '@/components/AuthLoginForm.vue';
-import AuthRegisterForm from '@/components/AuthRegisterForm.vue';
-import AuthResetPasswordForm from '@/components/AuthResetPasswordForm.vue';
-import AuthLayout from '@/views/AuthLayout.vue';
-import TodoView from '@/views/TodoView.vue';
-import MainLayout from '@/views/MainLayout.vue';
-import ProfileView from '@/views/ProfileView.vue';
+export const routeNames = {
+  todos: 'todos',
+  profile: 'profile',
+  auth: 'auth',
+  signin: 'signin',
+  signup: 'signup',
+  reset: 'reset',
+};
 
 const routes = [
   {
     path: '/',
-    component: MainLayout,
+    component: () => import('@/layouts/MainLayout.vue'),
     redirect: () => {
-      return { path: '/todos' };
+      return { name: routeNames.todos };
     },
     meta: { auth: true },
     children: [
-      { path: 'todos', name: 'Список задач', component: TodoView, meta: { auth: true } },
-      { path: 'profile', name: 'Профиль', component: ProfileView, meta: { auth: true } },
+      {
+        path: 'todos',
+        name: routeNames.todos,
+        component: () => import('@/pages/TodoPage.vue'),
+        meta: { auth: true, pageTitle: 'Список задач' },
+      },
+      {
+        path: 'profile',
+        name: routeNames.profile,
+        component: () => import('@/pages/ProfilePage.vue'),
+        meta: { auth: true, pageTitle: 'Профиль' },
+      },
     ],
   },
   {
     path: '/auth',
-    component: AuthLayout,
+    name: 'auth',
+    component: () => import('@/layouts/AuthLayout.vue'),
     redirect: () => {
-      return { path: '/auth/signin' };
+      return { name: routeNames.signin };
     },
     children: [
-      { path: 'signin', component: AuthLoginForm, meta: { auth: false } },
-      { path: 'signup', component: AuthRegisterForm, meta: { auth: false } },
-      { path: 'reset', component: AuthResetPasswordForm, meta: { auth: false } },
+      {
+        path: 'signin',
+        name: routeNames.signin,
+        component: () => import('@/components/AuthLoginForm.vue'),
+        meta: { auth: false },
+      },
+      {
+        path: 'signup',
+        name: routeNames.signup,
+        component: () => import('@/components/AuthRegisterForm.vue'),
+        meta: { auth: false },
+      },
+      {
+        path: 'reset',
+        name: routeNames.reset,
+        component: () => import('@/components/AuthResetPasswordForm.vue'),
+        meta: { auth: false },
+      },
     ],
   },
 ];
@@ -42,11 +70,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const token = JSON.parse(localStorage.getItem('userTokens') || '{}').token;
-
-  if (to.meta.auth && !token) {
-    next({ path: '/auth/signin' });
-  } else if (!to.meta.auth && token) {
+  if (to.meta.auth && !accessToken.value) {
+    next({ name: routeNames.signin });
+  } else if (!to.meta.auth && accessToken.value) {
     next({ path: '/' });
   } else {
     next();

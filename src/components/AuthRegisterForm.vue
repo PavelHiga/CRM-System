@@ -1,5 +1,5 @@
 <template>
-  <v-sheet v-if="!store.isAccountCreated" width="420" class="container d-flex flex-column justify-center">
+  <v-sheet v-if="!isAccountCreated" width="420" class="container d-flex flex-column justify-center">
     <div>
       <div class="text-center">
         <h1 class="text-h4">Создать аккаунт</h1>
@@ -60,20 +60,25 @@
           variant="outlined"
         ></v-text-field>
 
-        <v-btn class="mt-2 bg-pink-darken-4 px-0 py-2 font-weight-bold" type="submit" block
-          >Зарегистрироваться</v-btn
-        >
+        <v-btn class="mt-2 bg-pink-darken-4 px-0 py-2 font-weight-bold" type="submit" block>
+          Зарегистрироваться
+        </v-btn>
       </v-form>
       <p class="text-center mt-5">
         Есть аккаунт?
-        <router-link to="/auth/signin" class="text-pink-darken-4 cursor-pointer text-decoration-none"
-          >Войти</router-link
+        <router-link
+          :to="{ name: routeNames.signin }"
+          class="text-pink-darken-4 cursor-pointer text-decoration-none"
         >
+          Войти
+        </router-link>
       </p>
     </div>
   </v-sheet>
   <v-sheet v-else width="420" class="container d-flex flex-column justify-center">
-    <router-link to="/auth/signin" class="text-pink-darken-4 cursor-pointer text-decoration-none"
+    <router-link
+      :to="{ name: routeNames.signin }"
+      class="text-pink-darken-4 cursor-pointer text-decoration-none"
       >Войти в систему</router-link
     >
   </v-sheet>
@@ -82,7 +87,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 
-import type { UserRegistration } from '@/types/authTypes';
+import type { UserRegistration } from '@/types/auth';
 import {
   emailRules,
   loginRules,
@@ -92,7 +97,9 @@ import {
 } from '@/utils/validateRules';
 
 import { useAuthStore } from '@/store/store';
+import { routeNames } from '@/router/router';
 
+const isAccountCreated = ref(false);
 const store = useAuthStore();
 const { createAccount } = store;
 
@@ -106,8 +113,6 @@ const formData = reactive<UserRegistration>({
 });
 
 const secondPassword = ref('');
-
-// ?
 
 const secondPasswordRules = [
   (value: string) => {
@@ -130,9 +135,13 @@ const registerFormHandler = async () => {
   }
 
   if (isFormValid.value) {
-    await createAccount(formData);
+    try {
+      await createAccount(formData);
+      isAccountCreated.value = true;
+      alert('Акканут успешно создан!');
+    } catch (error) {
+      alert(error);
+    }
   }
 };
 </script>
-
-<style scoped></style>

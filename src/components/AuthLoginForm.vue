@@ -29,7 +29,7 @@
           label="Запомнить меня"
         ></v-checkbox-btn>
         <router-link
-          to="/auth/reset"
+          :to="{ name: routeNames.reset }"
           class="text-subtitle-1 text-pink-darken-4 cursor-pointer text-decoration-none"
         >
           Забыли пароль?
@@ -39,18 +39,21 @@
     </v-form>
     <p class="text-center mt-5">
       Нет аккаунта?
-      <router-link to="/auth/signup" class="text-pink-darken-4 cursor-pointer text-decoration-none"
-        >Регистрация</router-link
+      <router-link
+        :to="{ name: routeNames.signup }"
+        class="text-pink-darken-4 cursor-pointer text-decoration-none"
       >
+        Регистрация
+      </router-link>
     </p>
   </v-sheet>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import router from '@/router/router';
+import router, { routeNames } from '@/router/router';
 import { useAuthStore } from '@/store/store';
-import type { AuthData } from '@/types/authTypes';
+import type { AuthData } from '@/types/auth';
 import { loginRules, passwordRules } from '@/utils/validateRules';
 
 const store = useAuthStore();

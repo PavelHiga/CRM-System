@@ -1,84 +1,67 @@
 import { defineStore } from 'pinia';
-import { reactive, ref, watchEffect } from 'vue';
+import { reactive, ref } from 'vue';
 
-import { getUserProfile, refreshAccessToken, signInAccount, signUpAccount, updateUserProfile } from '@/api';
-import router from '@/router/router';
-import type { AuthData, ProfileRequest, UserData, UserRegistration } from '@/types/authTypes';
+import { accessToken, getUserProfile, refreshAccessToken, signInAccount, signUpAccount } from '@/api/auth';
+import router, { routeNames } from '@/router/router';
+import type { AuthData, UserData, UserRegistration } from '@/types/auth';
 
 export const useAuthStore = defineStore('auth', () => {
   const isAuth = ref(false);
-  const isAccountCreated = ref(false);
   const userData: UserData = reactive({
     user: null,
   });
 
-  async function createAccount(registrationData: UserRegistration) {
-    try {
-      const response = await signUpAccount(registrationData);
-      isAccountCreated.value = true;
-      alert('Акканут успешно создан!');
-    } catch (error) {
-      alert(error);
-    }
-  }
+  const createAccount = async (registrationData: UserRegistration) => {
+    const response = await signUpAccount(registrationData);
+    return response;
+  };
 
-  async function loginAccount(authData: AuthData) {
+  const loginAccount = async (authData: AuthData) => {
     try {
       const response = await signInAccount(authData);
-      localStorage.setItem(
-        'userTokens',
-        JSON.stringify({
-          token: response.accessToken,
-          refreshToken: response.refreshToken,
-        })
-      );
+      localStorage.setItem('refreshToken', response.refreshToken);
+      accessToken.value = response.accessToken;
       isAuth.value = true;
       alert('Вы успешно авторизовались');
     } catch (error) {
       alert(error);
     }
-  }
+  };
 
-  async function checkAuth() {
+  const checkAuth = async () => {
     try {
       const response = await refreshAccessToken();
-      localStorage.setItem(
-        'userTokens',
-        JSON.stringify({
-          token: response.accessToken,
-          refreshToken: response.refreshToken,
-        })
-      );
-      isAuth.value = true;
-      return response.accessToken;
+      localStorage.setItem('refreshToken', response.refreshToken);
+      accessToken.value = response.accessToken;
     } catch (error) {
-      localStorage.removeItem('userTokens');
-      router.push('/auth/signin');
+      localStorage.removeItem('refreshToken');
+      accessToken.value = '';
+      router.push({ name: routeNames.signin });
       console.log(error);
     }
-  }
+  };
 
-  function logoutAccount() {
-    localStorage.removeItem('userTokens');
-    router.push('/auth/signin');
-  }
+  const logoutAccount = () => {
+    localStorage.removeItem('refreshToken');
+    accessToken.value = '';
+    router.push({ name: routeNames.signin });
+  };
 
-  async function getUser() {
+  const getProfile = async () => {
     try {
       userData.user = await getUserProfile();
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return {
     isAuth,
-    isAccountCreated,
     userData,
     loginAccount,
     createAccount,
     checkAuth,
-    getUser,
+    getProfile,
     logoutAccount,
   };
 });

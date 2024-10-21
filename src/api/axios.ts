@@ -1,12 +1,13 @@
 import { useAuthStore } from '@/store/store';
 import axios, { type InternalAxiosRequestConfig } from 'axios';
+import { accessToken } from './auth';
 
 export const axiosInstance = axios.create({
   baseURL: 'https://easydev.club/api/v1',
 });
 
 axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  config.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('userTokens') || '{}').token}`;
+  config.headers.Authorization = `Bearer ${accessToken.value}`;
   return config;
 });
 
@@ -22,6 +23,7 @@ axiosInstance.interceptors.response.use(
       originalRequest._isRetry = true;
       try {
         await checkAuth();
+
         return axiosInstance.request(originalRequest);
       } catch (error) {
         console.log(error);

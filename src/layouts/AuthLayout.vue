@@ -5,8 +5,6 @@
   </v-layout>
 </template>
 
-<script setup lang="ts"></script>
-
 <style scoped>
 .image {
   height: 100vh;

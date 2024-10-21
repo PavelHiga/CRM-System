@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Todo } from '@/types/todoTypes';
+import type { Todo } from '@/types/todos';
 import TodoListItem from './TodoListItem.vue';
 
 const props = defineProps<{

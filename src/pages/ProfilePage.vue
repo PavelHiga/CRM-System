@@ -41,7 +41,7 @@ import { emailRules, phoneNumberRules, usernameRules } from '@/utils/validateRul
 import { onMounted, reactive, ref } from 'vue';
 
 onMounted(async () => {
-  await getUser();
+  await getProfile();
 
   if (store.userData.user) {
     formData.username = store.userData.user.username;
@@ -51,7 +51,7 @@ onMounted(async () => {
 });
 
 const store = useAuthStore();
-const { getUser } = store;
+const { getProfile } = store;
 const isFormDisabled = ref(true);
 
 const formData = reactive({
@@ -60,5 +60,3 @@ const formData = reactive({
   phoneNumber: '',
 });
 </script>
-
-<style scoped></style>

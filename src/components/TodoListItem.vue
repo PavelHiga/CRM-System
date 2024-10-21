@@ -46,8 +46,8 @@ import IconCancel from './icons/IconCancel.vue';
 import IconDone from './icons/IconDone.vue';
 import TheButton from './TheButton.vue';
 
-import type { Todo } from '@/types/todoTypes';
-import { changeTodoStatus, deleteTodo, editTodo } from '@/api';
+import type { Todo } from '@/types/todos';
+import { changeTodoStatus, deleteTodo, editTodo } from '@/api/todos';
 
 const props = defineProps<{
   data: Todo;

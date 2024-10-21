@@ -11,11 +11,11 @@
 </template>
 
 <script setup lang="ts">
-import { getAllTodos } from '@/api';
+import { getAllTodos } from '@/api/todos';
 import AddTodoForm from '@/components/AddTodoForm.vue';
 import TodoList from '@/components/TodoList.vue';
 import TodoListFilters from '@/components/TodoListFilters.vue';
-import type { IData } from '@/types/todoTypes';
+import type { IData } from '@/types/todos';
 import { onMounted, reactive } from 'vue';
 
 onMounted(async () => {
