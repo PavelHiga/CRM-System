@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { reactive, ref } from 'vue';
 
 import {
-  accessToken,
   changeAccessToken,
   getUserProfile,
   refreshAccessToken,

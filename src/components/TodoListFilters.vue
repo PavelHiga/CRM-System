@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import type { activeFilterStatus, TodoInfo } from '@/types/types';
+import type { activeFilterStatus, TodoInfo } from '@/types/todos';
 import { ref, watchEffect } from 'vue';
 
 const props = defineProps<{
