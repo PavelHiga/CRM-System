@@ -2,9 +2,12 @@ import type { AuthData, Profile, UserRegistration, Token, ProfileRequest } from 
 import { axiosInstance } from './axios';
 import { allResposeStatus } from '@/utils/responseStatus';
 import axios from 'axios';
-import { ref } from 'vue';
 
-export const accessToken = ref('');
+export let accessToken: string = '';
+
+export const changeAccessToken = (value: string) => {
+  accessToken = value;
+};
 
 export const signUpAccount = async (registrationData: UserRegistration): Promise<Profile> => {
   try {

@@ -14,7 +14,7 @@ const store = useAuthStore();
 const { checkAuth } = store;
 
 onMounted(async () => {
-  if (!accessToken.value) {
+  if (!accessToken) {
     await checkAuth();
     router.push('/');
   }

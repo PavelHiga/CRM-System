@@ -1,7 +1,14 @@
 import { defineStore } from 'pinia';
 import { reactive, ref } from 'vue';
 
-import { accessToken, getUserProfile, refreshAccessToken, signInAccount, signUpAccount } from '@/api/auth';
+import {
+  accessToken,
+  changeAccessToken,
+  getUserProfile,
+  refreshAccessToken,
+  signInAccount,
+  signUpAccount,
+} from '@/api/auth';
 import router, { routeNames } from '@/router/router';
 import type { AuthData, UserData, UserRegistration } from '@/types/auth';
 
@@ -20,7 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await signInAccount(authData);
       localStorage.setItem('refreshToken', response.refreshToken);
-      accessToken.value = response.accessToken;
+      changeAccessToken(response.accessToken);
       isAuth.value = true;
       alert('Вы успешно авторизовались');
     } catch (error) {
@@ -32,10 +39,10 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await refreshAccessToken();
       localStorage.setItem('refreshToken', response.refreshToken);
-      accessToken.value = response.accessToken;
+      changeAccessToken(response.accessToken);
     } catch (error) {
       localStorage.removeItem('refreshToken');
-      accessToken.value = '';
+      changeAccessToken('');
       router.push({ name: routeNames.signin });
       console.log(error);
     }
@@ -43,7 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const logoutAccount = () => {
     localStorage.removeItem('refreshToken');
-    accessToken.value = '';
+    changeAccessToken('');
     router.push({ name: routeNames.signin });
   };
 

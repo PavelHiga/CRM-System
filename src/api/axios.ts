@@ -7,7 +7,7 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  config.headers.Authorization = `Bearer ${accessToken.value}`;
+  config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
 });
 

@@ -70,9 +70,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.auth && !accessToken.value) {
+  if (to.meta.auth && !accessToken) {
     next({ name: routeNames.signin });
-  } else if (!to.meta.auth && accessToken.value) {
+  } else if (!to.meta.auth && accessToken) {
     next({ path: '/' });
   } else {
     next();
