@@ -1,27 +1,22 @@
 <template>
-  <div class="wrapper">
-    <TodoHeading />
-    <TodoListFilters :data="store.data?.info" />
-    <TodoList :data="store.data?.data" />
-  </div>
+  <v-app>
+    <RouterView />
+  </v-app>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { getAllTodos } from './api';
+import { useAuthStore } from './store/store';
+import router from './router/router';
+import { accessToken } from './api/auth';
 
-import TodoHeading from './components/TodoHeading.vue';
-import TodoList from './components/TodoList.vue';
-import TodoListFilters from './components/TodoListFilters.vue';
-import { store } from './store/store';
+const store = useAuthStore();
+const { checkAuth } = store;
 
-onMounted(() => {
-  getAllTodos('all');
+onMounted(async () => {
+  if (!accessToken) {
+    await checkAuth();
+    router.push('/');
+  }
 });
 </script>
-
-<style scoped lang="scss">
-.wrapper {
-  margin-top: 50px;
-}
-</style>

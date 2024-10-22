@@ -4,37 +4,50 @@
       <input v-model="editedTodo" class="task_input" type="text" />
     </template>
     <template v-else>
-      <div @click="changeTodoStatusClick(data)" class="task_info">
-        <div :class="isCheckBoxDone">
+      <div class="task_info">
+        <input @click="changeStatusHandler(data)" class="hidden_checkbox" type="checkbox" />
+        <div class="checkbox" :class="{ checkboxDone: data.isDone }">
           <IconDone size="20px" />
         </div>
-        <p :class="isTextDone">{{ data.title }}</p>
+        <p class="text" :class="{ textDone: data.isDone }">
+          {{ data.title }}
+        </p>
       </div>
     </template>
     <template v-if="isEdit">
       <div class="task_buttons">
-        <TheButton @click="saveTodoClick" :variant="ButtonVariant.Save" />
-        <TheButton @click="editTodoClick" :variant="ButtonVariant.Cancel" />
+        <TheButton @click="saveTodoHandler" variant="success">
+          <IconDone size="30px" />
+        </TheButton>
+        <TheButton @click="editTodoHandler" variant="alert">
+          <IconCancel />
+        </TheButton>
       </div>
     </template>
     <template v-else>
       <div class="task_buttons">
-        <TheButton @click="editTodoClick" :variant="ButtonVariant.Edit" />
-        <TheButton @click="deleteTodoClick(data.id)" :variant="ButtonVariant.Delete" />
+        <TheButton @click="editTodoHandler" variant="primary">
+          <IconEdit />
+        </TheButton>
+        <TheButton @click="deleteTodoHandler(data.id)" variant="alert">
+          <IconDelete />
+        </TheButton>
       </div>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
-import IconDone from '@/components/icons/IconDone.vue';
+import IconDelete from './icons/IconDelete.vue';
+import IconEdit from './icons/IconEdit.vue';
+import IconCancel from './icons/IconCancel.vue';
+import IconDone from './icons/IconDone.vue';
 import TheButton from './TheButton.vue';
-import { ButtonVariant } from '@/types/buttonVariant';
 
-import type { Todo } from '@/types/types';
-import { changeTodoStatus, deleteTodo, editTodo } from '@/api';
+import type { Todo } from '@/types/todos';
+import { changeTodoStatus, deleteTodo, editTodo } from '@/api/todos';
 
 const props = defineProps<{
   data: Todo;
@@ -42,25 +55,26 @@ const props = defineProps<{
 
 const isEdit = ref(false);
 const editedTodo = ref(props.data.title);
+const emit = defineEmits(['todoChanged']);
 
-const isCheckBoxDone = computed(() => (props.data.isDone ? 'info_checkbox-done' : 'info_checkbox'));
-const isTextDone = computed(() => (props.data.isDone ? 'info_text-done' : 'info_text'));
-
-const changeTodoStatusClick = (data: Todo) => {
-  changeTodoStatus(data);
-};
-
-const deleteTodoClick = (id: number) => {
-  deleteTodo(id);
-};
-
-const editTodoClick = () => {
+const editTodoHandler = () => {
   isEdit.value = !isEdit.value;
 };
 
-const saveTodoClick = () => {
+const changeStatusHandler = async (data: Todo) => {
+  await changeTodoStatus(data);
+  emit('todoChanged');
+};
+
+const deleteTodoHandler = async (id: number) => {
+  await deleteTodo(id);
+  emit('todoChanged');
+};
+
+const saveTodoHandler = async () => {
   if (editedTodo.value !== props.data.title) {
-    editTodo({ ...props.data, title: editedTodo.value });
+    await editTodo({ ...props.data, title: editedTodo.value });
+    emit('todoChanged');
   }
 
   isEdit.value = !isEdit.value;
@@ -68,7 +82,7 @@ const saveTodoClick = () => {
 </script>
 
 <style scoped lang="scss">
-%checkbox {
+%info_checkbox {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,7 +94,7 @@ const saveTodoClick = () => {
   width: 100%;
 }
 
-%text {
+%info_text {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 300px;
@@ -112,23 +126,31 @@ const saveTodoClick = () => {
 
     word-break: keep-all;
 
-    .info_checkbox {
-      @extend %checkbox;
-
-      &-done {
-        @extend %checkbox;
-        background-color: var(--blue-button);
-      }
+    .hidden_checkbox {
+      width: 355px;
+      position: absolute;
+      height: 30px;
+      cursor: pointer;
+      opacity: 0;
     }
 
-    .info_text {
-      @extend %text;
+    .checkbox {
+      @extend %info_checkbox;
+    }
 
-      &-done {
-        @extend %text;
-        color: #a5a7a8;
-        text-decoration: line-through;
-      }
+    .checkboxDone {
+      @extend %info_checkbox;
+      background-color: var(--primary-color);
+    }
+
+    .text {
+      @extend %info_text;
+    }
+
+    .textDone {
+      @extend %info_text;
+      color: #a5a7a8;
+      text-decoration: line-through;
     }
   }
 
