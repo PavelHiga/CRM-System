@@ -6,12 +6,11 @@
 </template>
 
 <script setup lang="ts">
+import { createTodo } from '@/api/todos';
 import TheButton from './TheButton.vue';
 import { ref } from 'vue';
-import { createTodo } from '@/api';
 
 const todoTitle = ref('');
-
 const emit = defineEmits(['todoCreated']);
 
 const createTodoHandler = async () => {
@@ -33,7 +32,6 @@ const createTodoHandler = async () => {
 .wrapper {
   display: flex;
   gap: 25px;
-
   .input {
     width: 100%;
     padding: 10px 7px;

@@ -1,41 +1,22 @@
 <template>
-  <div class="wrapper">
-    <AddTodoForm @todoCreated="updateTasks" />
-    <TodoListFilters
-      @filterChanged="updateTasks"
-      :data="store.data?.info"
-      :activeFilter="store.activeFilter"
-    />
-    <TodoList @todoChanged="updateTasks" :data="store.data ? store.data?.data : []" />
-  </div>
+  <v-app>
+    <RouterView />
+  </v-app>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue';
-import { getAllTodos } from './api';
+import { onMounted } from 'vue';
+import { useAuthStore } from './store/store';
+import router from './router/router';
+import { accessToken } from './api/auth';
 
-import AddTodoForm from './components/AddTodoForm.vue';
-import TodoList from './components/TodoList.vue';
-import TodoListFilters from './components/TodoListFilters.vue';
-import type { activeFilterStatus, IData } from './types/types';
+const store = useAuthStore();
+const { checkAuth } = store;
 
 onMounted(async () => {
-  store.data = await getAllTodos('all');
-});
-
-const updateTasks = async (status: activeFilterStatus = 'all') => {
-  store.data = await getAllTodos(status);
-  store.activeFilter = status;
-};
-
-const store: IData = reactive({
-  data: null,
-  activeFilter: 'all',
+  if (!accessToken) {
+    await checkAuth();
+    router.push('/');
+  }
 });
 </script>
-
-<style scoped lang="scss">
-.wrapper {
-  margin-top: 50px;
-}
-</style>
