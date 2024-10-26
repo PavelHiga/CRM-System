@@ -5,7 +5,7 @@
       <v-col cols="10">
         <v-sheet>
           <div class="py-4 px-7 border-b-sm w-100 bg-grey-lighten-4 text-h5">{{ router.meta.pageTitle }}</div>
-          <div class="px-5">
+          <div class="pa-7">
             <RouterView />
           </div>
         </v-sheet>

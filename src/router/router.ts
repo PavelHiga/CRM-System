@@ -2,6 +2,7 @@ import { accessToken } from '@/api/auth';
 import { createRouter, createWebHistory } from 'vue-router';
 
 export const routeNames = {
+  users: 'users',
   todos: 'todos',
   profile: 'profile',
   auth: 'auth',
@@ -19,6 +20,12 @@ const routes = [
     },
     meta: { auth: true },
     children: [
+      {
+        path: 'users',
+        name: routeNames.users,
+        component: () => import('@/pages/UsersPage.vue'),
+        meta: { auth: true, pageTitle: 'Пользователи' },
+      },
       {
         path: 'todos',
         name: routeNames.todos,

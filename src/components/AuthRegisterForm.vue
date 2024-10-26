@@ -96,7 +96,7 @@ import {
   usernameRules,
 } from '@/utils/validateRules';
 
-import { useAuthStore } from '@/store/store';
+import { useAuthStore } from '@/store/auth';
 import { routeNames } from '@/router/router';
 
 const isAccountCreated = ref(false);

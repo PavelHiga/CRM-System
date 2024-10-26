@@ -9,11 +9,11 @@ import {
   signUpAccount,
 } from '@/api/auth';
 import router, { routeNames } from '@/router/router';
-import type { AuthData, UserData, UserRegistration } from '@/types/auth';
+import type { AuthData, ProfileData, UserRegistration } from '@/types/auth';
 
 export const useAuthStore = defineStore('auth', () => {
   const isAuth = ref(false);
-  const userData: UserData = reactive({
+  const profileData: ProfileData = reactive({
     user: null,
   });
 
@@ -55,7 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const getProfile = async () => {
     try {
-      userData.user = await getUserProfile();
+      profileData.user = await getUserProfile();
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +63,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     isAuth,
-    userData,
+    profileData,
     loginAccount,
     createAccount,
     checkAuth,

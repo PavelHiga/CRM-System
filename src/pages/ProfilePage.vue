@@ -36,17 +36,17 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '@/store/store';
+import { useAuthStore } from '@/store/auth';
 import { emailRules, phoneNumberRules, usernameRules } from '@/utils/validateRules';
 import { onMounted, reactive, ref } from 'vue';
 
 onMounted(async () => {
   await getProfile();
 
-  if (store.userData.user) {
-    formData.username = store.userData.user.username;
-    formData.email = store.userData.user.email;
-    formData.phoneNumber = store.userData.user.phoneNumber;
+  if (store.profileData.user) {
+    formData.username = store.profileData.user.username;
+    formData.email = store.profileData.user.email;
+    formData.phoneNumber = store.profileData.user.phoneNumber;
   }
 });
 

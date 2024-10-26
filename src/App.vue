@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useAuthStore } from './store/store';
+import { useAuthStore } from './store/auth';
 import router from './router/router';
 import { accessToken } from './api/auth';
 
