@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
-import { reactive, ref } from 'vue';
+import { defineStore } from "pinia";
+import { reactive, ref } from "vue";
 
 import {
   changeAccessToken,
@@ -7,11 +7,11 @@ import {
   refreshAccessToken,
   signInAccount,
   signUpAccount,
-} from '@/api/auth';
-import router, { routeNames } from '@/router/router';
-import type { AuthData, ProfileData, UserRegistration } from '@/types/auth';
+} from "@/api/auth";
+import router, { routeNames } from "@/router/router";
+import type { AuthData, ProfileData, UserRegistration } from "@/types/auth";
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuthStore = defineStore("auth", () => {
   const isAuth = ref(false);
   const profileData: ProfileData = reactive({
     user: null,
@@ -25,10 +25,10 @@ export const useAuthStore = defineStore('auth', () => {
   const loginAccount = async (authData: AuthData) => {
     try {
       const response = await signInAccount(authData);
-      localStorage.setItem('refreshToken', response.refreshToken);
+      localStorage.setItem("refreshToken", response.refreshToken);
       changeAccessToken(response.accessToken);
       isAuth.value = true;
-      alert('Вы успешно авторизовались');
+      alert("Вы успешно авторизовались");
     } catch (error) {
       alert(error);
     }
@@ -37,19 +37,20 @@ export const useAuthStore = defineStore('auth', () => {
   const checkAuth = async () => {
     try {
       const response = await refreshAccessToken();
-      localStorage.setItem('refreshToken', response.refreshToken);
+      localStorage.setItem("refreshToken", response.refreshToken);
       changeAccessToken(response.accessToken);
     } catch (error) {
-      localStorage.removeItem('refreshToken');
-      changeAccessToken('');
+      console.log("не прошел");
+      localStorage.removeItem("refreshToken");
+      changeAccessToken("");
       router.push({ name: routeNames.signin });
       console.log(error);
     }
   };
 
   const logoutAccount = () => {
-    localStorage.removeItem('refreshToken');
-    changeAccessToken('');
+    localStorage.removeItem("refreshToken");
+    changeAccessToken("");
     router.push({ name: routeNames.signin });
   };
 

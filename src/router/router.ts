@@ -2,7 +2,8 @@ import { accessToken } from '@/api/auth';
 import { createRouter, createWebHistory } from 'vue-router';
 
 export const routeNames = {
-  users: 'users',
+  users: 'dashboard',
+  adminProfile: 'admin-profile',
   todos: 'todos',
   profile: 'profile',
   auth: 'auth',
@@ -23,8 +24,14 @@ const routes = [
       {
         path: 'users',
         name: routeNames.users,
-        component: () => import('@/pages/UsersPage.vue'),
-        meta: { auth: true, pageTitle: 'Пользователи' },
+        component: () => import('@/pages/AdminDashboardPage.vue'),
+        meta: { auth: true, isAdmin: true, pageTitle: 'Пользователи' },
+      },
+      {
+        path: 'users/:id',
+        name: routeNames.adminProfile,
+        component: () => import('@/pages/AdminProfilePage.vue'),
+        meta: { auth: true, isAdmin: true, pageTitle: 'Профиль' },
       },
       {
         path: 'todos',

@@ -1,7 +1,7 @@
 export interface UserRequest {
   search?: string;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
   isBlocked?: boolean;
   limit?: number;
   offset?: number;
@@ -22,20 +22,16 @@ export interface MetaResponse<T> {
   meta: {
     totalAmount: number;
     sortBy: string;
-    sortOrder: 'asc' | 'desc';
+    sortOrder: "asc" | "desc";
   };
 }
 export interface UserRightsUpdate {
-  isAdmin: boolean;
-  isBlocked: boolean;
+  field: string;
+  value: boolean;
 }
 
 export interface UserUpdate {
   username?: string;
   email?: string;
   phoneNumber?: string;
-}
-
-export interface UsersData {
-  data: MetaResponse<User> | null;
 }
