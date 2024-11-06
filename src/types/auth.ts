@@ -25,7 +25,7 @@ export interface Profile {
   phoneNumber: string;
 }
 
-export interface UserData {
+export interface ProfileData {
   user: Profile | null;
 }
 

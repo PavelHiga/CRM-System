@@ -1,9 +1,9 @@
-import type { AuthData, Profile, UserRegistration, Token, ProfileRequest } from '@/types/auth';
-import { axiosInstance } from './axios';
-import { allResposeStatus } from '@/utils/responseStatus';
-import axios from 'axios';
+import type { AuthData, Profile, UserRegistration, Token, ProfileRequest } from "@/types/auth";
+import { axiosInstance } from "./axios";
+import { allResposeStatus } from "@/utils/responseStatus";
+import axios from "axios";
 
-export let accessToken: string = '';
+export let accessToken: string = "";
 
 export const changeAccessToken = (value: string) => {
   accessToken = value;
@@ -32,7 +32,7 @@ export const signInAccount = async (authData: AuthData): Promise<Token> => {
 };
 
 export const refreshAccessToken = async (): Promise<Token> => {
-  const token = localStorage.getItem('refreshToken');
+  const token = localStorage.getItem("refreshToken");
   try {
     const response = await axios.post<Token>(`https://easydev.club/api/v1/auth/refresh`, {
       refreshToken: token,
@@ -42,7 +42,7 @@ export const refreshAccessToken = async (): Promise<Token> => {
   } catch (error: any) {
     console.log(error);
     const status = error?.request?.status;
-    throw new Error(status === 401 ? 'Сессия истекла' : allResposeStatus[status]);
+    throw new Error(status === 401 ? "Сессия истекла" : allResposeStatus[status]);
   }
 };
 
@@ -64,6 +64,8 @@ export const updateUserProfile = async (profileData: ProfileRequest): Promise<Pr
   } catch (error: any) {
     console.log(error);
     const status = error?.request?.status;
-    throw new Error(status === 400 ? 'Логин/электронная почта уже используются' : allResposeStatus[status]);
+    throw new Error(
+      status === 400 ? "Логин/электронная почта уже используются" : allResposeStatus[status]
+    );
   }
 };

@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import router, { routeNames } from '@/router/router';
-import { useAuthStore } from '@/store/store';
+import { useAuthStore } from '@/store/auth';
 import type { AuthData } from '@/types/auth';
 import { loginRules, passwordRules } from '@/utils/validateRules';
 

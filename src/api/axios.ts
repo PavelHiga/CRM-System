@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/store/store';
+import { useAuthStore } from '@/store/auth';
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 import { accessToken } from './auth';
 

@@ -1,7 +1,9 @@
 <template>
   <v-sheet class="mx-auto" width="500px">
     <v-form :readonly="isFormDisabled" ref="form" class="mt-6" validate-on="blur">
-      <div activeClass="border-indigo-500" class="text-subtitle-1 text-medium-emphasis">Имя пользователя</div>
+      <div activeClass="border-indigo-500" class="text-subtitle-1 text-medium-emphasis">
+        Имя пользователя
+      </div>
       <v-text-field
         v-model="formData.username"
         :rules="usernameRules"
@@ -10,7 +12,9 @@
         variant="outlined"
       ></v-text-field>
 
-      <div activeClass="border-indigo-500" class="text-subtitle-1 text-medium-emphasis">Почтовый адрес</div>
+      <div activeClass="border-indigo-500" class="text-subtitle-1 text-medium-emphasis">
+        Почтовый адрес
+      </div>
       <v-text-field
         v-model="formData.email"
         :rules="emailRules"
@@ -27,7 +31,12 @@
         variant="outlined"
       ></v-text-field>
       <div class="d-flex flex-column ga-2">
-        <v-btn disabled class="mt-2 pa-2 text-black font-weight-bold" variant="outlined" type="submit">
+        <v-btn
+          disabled
+          class="mt-2 pa-2 text-black font-weight-bold"
+          variant="outlined"
+          type="submit"
+        >
           Сменить данные
         </v-btn>
       </div>
@@ -36,27 +45,22 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '@/store/store';
-import { emailRules, phoneNumberRules, usernameRules } from '@/utils/validateRules';
-import { onMounted, reactive, ref } from 'vue';
+import { useSessionStore } from "@/store/session";
+import { emailRules, phoneNumberRules, usernameRules } from "@/utils/validateRules";
+import { reactive, ref } from "vue";
 
-onMounted(async () => {
-  await getProfile();
-
-  if (store.userData.user) {
-    formData.username = store.userData.user.username;
-    formData.email = store.userData.user.email;
-    formData.phoneNumber = store.userData.user.phoneNumber;
-  }
-});
-
-const store = useAuthStore();
-const { getProfile } = store;
+const store = useSessionStore();
 const isFormDisabled = ref(true);
 
 const formData = reactive({
-  username: '',
-  email: '',
-  phoneNumber: '',
+  username: "",
+  email: "",
+  phoneNumber: "",
 });
+
+if (store.profileData.user) {
+  formData.username = store.profileData.user.username;
+  formData.email = store.profileData.user.email;
+  formData.phoneNumber = store.profileData.user.phoneNumber;
+}
 </script>
