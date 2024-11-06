@@ -1,21 +1,12 @@
 import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 
-import {
-  changeAccessToken,
-  getUserProfile,
-  refreshAccessToken,
-  signInAccount,
-  signUpAccount,
-} from "@/api/auth";
+import { changeAccessToken, refreshAccessToken, signInAccount, signUpAccount } from "@/api/auth";
 import router, { routeNames } from "@/router/router";
-import type { AuthData, ProfileData, UserRegistration } from "@/types/auth";
+import type { AuthData, UserRegistration } from "@/types/auth";
 
 export const useAuthStore = defineStore("auth", () => {
   const isAuth = ref(false);
-  const profileData: ProfileData = reactive({
-    user: null,
-  });
 
   const createAccount = async (registrationData: UserRegistration) => {
     const response = await signUpAccount(registrationData);
@@ -42,6 +33,7 @@ export const useAuthStore = defineStore("auth", () => {
     } catch (error) {
       console.log("не прошел");
       localStorage.removeItem("refreshToken");
+      sessionStorage.removeItem("routeHistory");
       changeAccessToken("");
       router.push({ name: routeNames.signin });
       console.log(error);
@@ -50,25 +42,16 @@ export const useAuthStore = defineStore("auth", () => {
 
   const logoutAccount = () => {
     localStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("routeHistory");
     changeAccessToken("");
     router.push({ name: routeNames.signin });
   };
 
-  const getProfile = async () => {
-    try {
-      profileData.user = await getUserProfile();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return {
     isAuth,
-    profileData,
     loginAccount,
     createAccount,
     checkAuth,
-    getProfile,
     logoutAccount,
   };
 });

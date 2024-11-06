@@ -39,7 +39,7 @@
       <v-btn
         v-if="isFormDisabled"
         @click="isFormDisabled = false"
-        class="mt-2 pa-2 text-black font-weight-bold"
+        class="mt-2 py-2 px-0 text-black font-weight-bold w-100"
         variant="outlined"
       >
         Сменить данные

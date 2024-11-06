@@ -27,7 +27,7 @@ interface TableFilters {
   sortBy?: [
     {
       key: string;
-      order: string;
+      order: "asc" | "desc" | undefined;
     }
   ];
   isBlocked?: boolean;
@@ -49,21 +49,15 @@ export const useAdminStore = defineStore("admin", () => {
   });
 
   const getUsers = async (filters?: TableFilters) => {
-    const offset = filters && filters?.page ? filters?.page - 1 : 0;
-
-    const sortBy = filters && filters?.sortBy ? filters?.sortBy[0]?.key : "";
-
-    const sortOrder: any = filters && filters?.sortBy ? filters?.sortBy[0]?.order : "";
-
     allUsersData.isLoading = true;
 
     try {
       const response = await getUsersFetch({
-        offset: offset,
+        offset: tablePage.value - 1,
         limit: 20,
         search: filters?.search ? filters?.search : "",
-        sortBy: sortBy,
-        sortOrder: sortOrder,
+        sortBy: filters?.sortBy ? filters?.sortBy[0]?.key : "",
+        sortOrder: filters?.sortBy && filters?.sortBy[0]?.order,
         isBlocked: activeFilter.value.value,
       });
       allUsersData.data = response;

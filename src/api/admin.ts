@@ -3,11 +3,14 @@ import { axiosInstance } from "./axios";
 import type { User, MetaResponse, UserRequest, UserUpdate, UserRightsUpdate } from "@/types/admin";
 
 export const getUsersFetch = async (filters: UserRequest): Promise<MetaResponse<User>> => {
-  const isBlocked = filters.isBlocked !== undefined ? `isBlocked=${filters.isBlocked}` : "";
+  const isBlocked = filters.isBlocked !== undefined ? `&isBlocked=${filters.isBlocked}` : "";
+  const search = filters.search ? `&search=${filters.search}` : "";
+  const sortBy = filters.sortBy ? `&sortBy=${filters.sortBy}` : "";
+  const sortOrder = filters.sortOrder ? `&sortOrder=${filters.sortOrder}` : "";
 
   try {
     const response = await axiosInstance.get<MetaResponse<User>>(
-      `/admin/users?limit=${filters.limit}&offset=${filters.offset}&search=${filters.search}&sortBy=${filters.sortBy}&sortOrder=${filters.sortOrder}&${isBlocked}`
+      `/admin/users?limit=${filters.limit}&offset=${filters.offset}${search}${sortBy}${sortOrder}${isBlocked}`
     );
     return response.data;
   } catch (error) {

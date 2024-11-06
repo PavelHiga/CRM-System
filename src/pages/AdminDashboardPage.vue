@@ -92,10 +92,7 @@
                   <v-btn
                     class="ml-auto"
                     text="Да"
-                    @click="
-                      handleBlockItemClick(item);
-                      isActive.value = false;
-                    "
+                    @click="handleBlockItemClick(item, isActive)"
                   ></v-btn>
                   <v-btn class="mr-auto" text="Нет" @click="isActive.value = false"></v-btn>
                 </template>
@@ -131,10 +128,7 @@
                       <v-btn
                         class="ml-auto"
                         text="Да"
-                        @click="
-                          handleChangeRightsClick(item);
-                          isActive.value = false;
-                        "
+                        @click="handleChangeRightsClick(item, isActive)"
                       ></v-btn>
                       <v-btn class="mr-auto" text="Нет" @click="isActive.value = false"></v-btn>
                     </template>
@@ -152,10 +146,7 @@
                       <v-btn
                         class="ml-auto"
                         text="Да"
-                        @click="
-                          handleDeleteItemClick(item.id);
-                          isActive.value = false;
-                        "
+                        @click="handleDeleteItemClick(item.id, isActive)"
                       ></v-btn>
                       <v-btn class="mr-auto" text="Нет" @click="isActive.value = false"></v-btn>
                     </template>
@@ -168,7 +159,7 @@
       </template>
 
       <template v-slot:bottom>
-        <div v-show="isPaginationActive" class="text-center pt-2">
+        <div v-show="pageCount > 1" class="text-center pt-2">
           <v-pagination v-model="store.tablePage" :length="pageCount"></v-pagination>
         </div>
       </template>
@@ -177,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import router from "@/router/router";
 import { useDate } from "vuetify";
 import IconFilter from "@/components/icons/IconFilter.vue";
@@ -187,10 +178,6 @@ import IconDots from "@/components/icons/IconDots.vue";
 
 import { useAdminStore } from "@/store/admin";
 import type { User } from "@/types/admin";
-
-onMounted(async () => {
-  await getUsers();
-});
 
 const date = useDate();
 const store = useAdminStore();
@@ -225,31 +212,28 @@ const pageCount = computed(() => {
     : 1;
 });
 
-const isPaginationActive = computed(() => {
-  if (search.value || store.activeFilter.value !== undefined) {
-    return store.allUsersData?.data?.data && store.allUsersData?.data?.data.length > 19;
-  }
-
-  return store.allUsersData?.data?.data && pageCount.value > 1;
-});
-
 const changeFilterHandler = async (filter: { title: string; value?: boolean }) => {
   store.activeFilter = filter;
   await getUsers();
   store.tablePage = 1;
 };
 
-const handleDeleteItemClick = async (id: number) => {
+const handleDeleteItemClick = async (id: number, isActive: any) => {
+  isActive.value = false;
   await deleteUser(String(id));
   await getUsers();
 };
 
-const handleChangeRightsClick = async (user: User) => {
+const handleChangeRightsClick = async (user: User, isActive: any) => {
+  isActive.value = false;
+
   await updateUserRights(String(user.id), { field: "isAdmin", value: !user.isAdmin });
   await getUsers();
 };
 
-const handleBlockItemClick = async (user: User) => {
+const handleBlockItemClick = async (user: User, isActive: any) => {
+  isActive.value = false;
+
   if (user.isBlocked) {
     await unblockUser(String(user.id));
   } else {

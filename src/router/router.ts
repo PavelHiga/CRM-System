@@ -1,76 +1,76 @@
-import { accessToken } from '@/api/auth';
-import { createRouter, createWebHistory } from 'vue-router';
+import { accessToken } from "@/api/auth";
+import { createRouter, createWebHistory } from "vue-router";
 
 export const routeNames = {
-  users: 'dashboard',
-  adminProfile: 'admin-profile',
-  todos: 'todos',
-  profile: 'profile',
-  auth: 'auth',
-  signin: 'signin',
-  signup: 'signup',
-  reset: 'reset',
+  users: "dashboard",
+  adminProfile: "admin-profile",
+  todos: "todos",
+  profile: "profile",
+  auth: "auth",
+  signin: "signin",
+  signup: "signup",
+  reset: "reset",
 };
 
 const routes = [
   {
-    path: '/',
-    component: () => import('@/layouts/MainLayout.vue'),
+    path: "/",
+    component: () => import("@/layouts/MainLayout.vue"),
     redirect: () => {
       return { name: routeNames.todos };
     },
     meta: { auth: true },
     children: [
       {
-        path: 'users',
+        path: "users",
         name: routeNames.users,
-        component: () => import('@/pages/AdminDashboardPage.vue'),
-        meta: { auth: true, isAdmin: true, pageTitle: 'Пользователи' },
+        component: () => import("@/pages/AdminDashboardPage.vue"),
+        meta: { auth: true, isAdmin: true, pageTitle: "Пользователи" },
       },
       {
-        path: 'users/:id',
+        path: "users/:id",
         name: routeNames.adminProfile,
-        component: () => import('@/pages/AdminProfilePage.vue'),
-        meta: { auth: true, isAdmin: true, pageTitle: 'Профиль' },
+        component: () => import("@/pages/AdminProfilePage.vue"),
+        meta: { auth: true, isAdmin: true, pageTitle: "Профиль" },
       },
       {
-        path: 'todos',
+        path: "todos",
         name: routeNames.todos,
-        component: () => import('@/pages/TodoPage.vue'),
-        meta: { auth: true, pageTitle: 'Список задач' },
+        component: () => import("@/pages/TodoPage.vue"),
+        meta: { auth: true, pageTitle: "Список задач" },
       },
       {
-        path: 'profile',
+        path: "profile",
         name: routeNames.profile,
-        component: () => import('@/pages/ProfilePage.vue'),
-        meta: { auth: true, pageTitle: 'Профиль' },
+        component: () => import("@/pages/ProfilePage.vue"),
+        meta: { auth: true, pageTitle: "Профиль" },
       },
     ],
   },
   {
-    path: '/auth',
-    name: 'auth',
-    component: () => import('@/layouts/AuthLayout.vue'),
+    path: "/auth",
+    name: "auth",
+    component: () => import("@/layouts/AuthLayout.vue"),
     redirect: () => {
       return { name: routeNames.signin };
     },
     children: [
       {
-        path: 'signin',
+        path: "signin",
         name: routeNames.signin,
-        component: () => import('@/components/AuthLoginForm.vue'),
+        component: () => import("@/components/AuthLoginForm.vue"),
         meta: { auth: false },
       },
       {
-        path: 'signup',
+        path: "signup",
         name: routeNames.signup,
-        component: () => import('@/components/AuthRegisterForm.vue'),
+        component: () => import("@/components/AuthRegisterForm.vue"),
         meta: { auth: false },
       },
       {
-        path: 'reset',
+        path: "reset",
         name: routeNames.reset,
-        component: () => import('@/components/AuthResetPasswordForm.vue'),
+        component: () => import("@/components/AuthResetPasswordForm.vue"),
         meta: { auth: false },
       },
     ],
@@ -80,14 +80,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  linkActiveClass: 'bg-grey-lighten-3 black',
+  linkActiveClass: "bg-grey-lighten-3 black",
 });
 
 router.beforeEach((to, from, next) => {
+  sessionStorage.setItem("routeHistory", to.fullPath);
+
   if (to.meta.auth && !accessToken) {
     next({ name: routeNames.signin });
   } else if (!to.meta.auth && accessToken) {
-    next({ path: '/' });
+    next({ path: "/" });
   } else {
     next();
   }
